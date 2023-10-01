@@ -1,0 +1,5 @@
+dist
+node_modules
+user_data
+.DS_Store
+data.json
