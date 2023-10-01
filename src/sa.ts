@@ -4,8 +4,8 @@ import { alertPage, sleep} from "./utils";
 
 //NEED TO CHANGE THESE TWO LINES FOR THE BOT TO WORK
 /***************************************************************************************************************************************************/
-const paused = false
-const extensionPath = "C:\\Users\\colto\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\bhhhlbepdkbapadjdnnojkbgioiodbic\\1.52.0_0";
+const paused = true
+const extensionPath = "C:\\Users\\YOUR_PC_NAME\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\bhhhlbepdkbapadjdnnojkbgioiodbic\\1.52.0_0";
 /***************************************************************************************************************************************************/
 
 (async () => {
