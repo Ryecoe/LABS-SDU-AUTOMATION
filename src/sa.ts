@@ -8,14 +8,23 @@ const paused = true
 const extensionPath = "C:\\Users\\YOUR_PC_NAME\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\bhhhlbepdkbapadjdnnojkbgioiodbic\\1.52.0_0";
 /***************************************************************************************************************************************************/
 
+
+// 1 minute in milliseconds
+let PLAY_FOR_BEFORE_REFRESH = 60 * 1 * 1000;
+
+
 (async () => {
   // Set the path to your Chrome extension folder
+
   const browser = await puppeteer.launch({
     headless: false, // Set to false to see the browser in action
     userDataDir: "./user_data",
     defaultViewport: null,
     args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
   });
+
+  // somehow have to setup the solflare wallet
+  // and connect to the burner wallet and setup auto approve
 
   // Open a new page and navigate to a website
   const page = await browser.newPage();
@@ -38,6 +47,7 @@ const extensionPath = "C:\\Users\\YOUR_PC_NAME\\AppData\\Local\\Google\\Chrome\\
   });
 
   while (true) {
+
     await sleep(5000);
     if(!paused){
       await initializeGame(page);
@@ -48,10 +58,15 @@ const extensionPath = "C:\\Users\\YOUR_PC_NAME\\AppData\\Local\\Google\\Chrome\\
     try {
       const playGame = new PlayGame(page, width, height);
       while (true) {
+         //if been playing for more than 1 hour refresh page
+        if (new Date().getTime() - start_time > PLAY_FOR_BEFORE_REFRESH) {
+          await playGame.startPlaying();
+          await page.reload();
+          break;
+        }
         if(!paused){
           await playGame.startPlaying();
         }
-       
       }
     } catch (e) {
       console.log(e);
@@ -75,23 +90,28 @@ async function initializeGame(page: Page) {
   const centerX = width / 2;
   const centerY = height / 2;
 
-  //Launch Game
-  await page.mouse.click(centerX, centerY + 210);
+
+  // connect wallet
+  await page.mouse.click(centerX, centerY +  250);
   await sleep(2000);
  
-  //Select Wallet Button
-  await page.mouse.click(centerX, centerY + 100);
-  await sleep(5000);
 
-  //Select Solflare Wallet
+  // Launch Game
+  await page.mouse.click(centerX, centerY + 100);
+  await sleep(2000);
+ 
+
+  // Select Wallet
   await page.mouse.click(centerX, centerY - 50);
   await sleep(5000);
 
-  //Connect button
+
+//Connect
   await page.mouse.click(centerX, centerY + 210);
   await sleep(8000);
 
+
   //Play Game
   await page.mouse.click(centerX, centerY + 100);
-  await sleep(4000);
+  await sleep(6000);
 }
