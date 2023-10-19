@@ -1,5 +1,5 @@
 import { Page } from "puppeteer";
-import { sleep} from "./utils";
+import {sleep} from "./utils";
 
 export default class PlayGame {
   page: Page;
@@ -8,56 +8,55 @@ export default class PlayGame {
   centerX: number;
   centerY: number;
 
-  firstFleetShipX: number;
-  firstFleetShipY: number;
+  numberOfFleets: number;
 
-  manageFleetX: number;
-  manageFleetY: number;
+  //firstScanX: number;
+  //firstScanY: number;
 
-  SectorScanX: number;
-  SectorScanY: number;
+  bottomScanX: number;
+  bottomScanY: number;
 
-  scanButtonX: number;
-  scanButtonY: number;
+  sectorScanX: number;
+  sectorScanY: number;
 
   constructor(page: Page, width: number, height: number) {
     this.page = page;
     this.width = width;
     this.height = height;
 
+    this.numberOfFleets = 6;
+
     // Calculate the center coordinates
     this.centerX = this.width / 2;
     this.centerY = this.height / 2;
 
-    this.firstFleetShipX = this.centerX + 600;
-    this.firstFleetShipY = this.centerY +  390;
+    this.sectorScanX = this.centerX + 500;
+    this.sectorScanY = this.centerY + 320;
 
-    this.manageFleetX = this.centerX + 550;
-    this.manageFleetY = this.centerY + 300;
+    //this.firstScanX = this.centerX + 550;
+    //this.firstScanY = this.centerY +  340;
 
-    this.SectorScanX = this.centerX + 400;
-    this.SectorScanY = this.centerY - 5;
-
-    this.scanButtonX = this.centerX - 330;
-    this.scanButtonY = this.centerY + 210;
+    this.bottomScanX = this.centerX + 550;
+    this.bottomScanY = this.centerY +  380;
   }
 
   async startPlaying(){
-    await this.page.mouse.wheel({deltaY: 225})
+    await this.page.mouse.wheel({deltaY: 200})
     await sleep(1000);
-    await this.page.mouse.click(this.firstFleetShipX -50, this.firstFleetShipY);
-    await sleep(9000);
-    await this.page.mouse.click(this.manageFleetX, this.manageFleetY);
-    await sleep(2000);
-    await this.page.mouse.click(this.SectorScanX, this.SectorScanY);
-    await sleep(1500);
+    await this.page.mouse.click(this.sectorScanX, this.sectorScanY)
+    await sleep(1000)
+
+    await sleep(1000);
       for( let i = 0; i < 30; i++){
-        await this.scan(this.page, this.firstFleetShipY);
+        await this.scan(this.page);
     }
+    await this.page.mouse.wheel({deltaY: -200})
+    await sleep(1000)
   }
 
-  private async scan(page: Page, y) {
-    await page.mouse.click(this.scanButtonX, this.scanButtonY);
-    await sleep(116000);
+  private async scan(page: Page) {
+    await this.page.mouse.click(this.centerX + 520,this.centerY + 370)
+    await sleep(121000);
+
   }
 }
